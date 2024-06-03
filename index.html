@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteio Loteria</title>
+</head>
+<body>
+    <h1>MEGA SENA</h1>
+
+<script>
+    let count = 1; 
+    let numeros_do_usuario = [];
+    let numero_gerado = [];
+    let numeros_acertados = 0;
+    let messagem_final = "Infelizmente voçê não conseguiu ganhar!"
+    let min = 0;
+    let max = 0;
+    // Matriculas dos alunos:
+    //Rafael Bruno Nogueira Filho - 2415517
+    //Gabriel Amorim Rocha - 2415550    
+    //Mateus Munis de Freitas - 2415521
+    //Matheus Saunders Martins - 2415538
+    //Arthur Campelo Guerra - 2415468
+    
+//putaria desenfreada
+
+
+    // loop de entrada de dados.
+    while(true){
+        let numero_igual = false;
+        let numero_de_entrada;
+
+        if(count > 6) break;// condição para sair do loop.
+
+        numero_de_entrada = prompt(`Digite ${count}º número de 1 a 60 sem repetir`);// entrada de dados.
+
+        if(numero_de_entrada === "exit"){ // se digitado exit prompt sera fechado.
+            console.log("Volte sempre!");
+            break;
+        }
+        // se o vetor numeros do usuario estiver vazio. Entrara no condicional verificando se número esta entre 1 a 60.
+        if(numero_de_entrada > 0 && numero_de_entrada <= 60 && numeros_do_usuario.length == 0){
+            numeros_do_usuario.push(parseInt(numero_de_entrada));
+            count++;//caso cnotrario se estivar com algum elemento.
+        }else if(numero_de_entrada > 0 && numero_de_entrada <= 60 && numeros_do_usuario.length > 0){// verifica se esta entre 1 e 60.
+            for(let i of numeros_do_usuario){
+                if(i == parseInt(numero_de_entrada)) numero_igual = true;//verifica se a igualdade de elementos.
+            }
+            if(numero_igual === false){// se não houver igualdade número e inserido no vetor.
+                numeros_do_usuario.push(parseInt(numero_de_entrada));
+                count++;
+            }else{ alert("Não pode inserir número repetido!"); }
+        }else{ alert("Digite o número de 1 a 60!"); }
+    }// Fim do loop de entrada de dados.
+
+    count = 1;
+    //geração dos números aleatorios.
+    while(true){
+        let numero_igual = false;
+        if(count > 6) break;// condição para sair do loop.
+
+        let numero_novo = parseInt((Math.random()*60));// números são gerados de 1 a 60.
+        
+        if(numero_gerado.length == 0){//condicional para adicao do primeiro numero.
+            numero_gerado.push(numero_novo);
+            count ++;
+        }else{
+            for(let i of numero_gerado){
+                if(i === numero_novo){ numero_igual = true; }// condicional verifica se já existe número novo gerado.
+            }
+            if(numero_igual === false){
+                numero_gerado.push(numero_novo);
+                count++;
+            }
+        } 
+    }// Fim da geração dos numeros aleatorios.
+
+    //ordenação crescente dos numeros do usuario.
+    for(let i=0; i< numeros_do_usuario.length - 1; i++){
+        for(let x=i+1; x<=numeros_do_usuario.length; x++){
+            if(numeros_do_usuario[i] > numeros_do_usuario[x]){
+                let aux = numeros_do_usuario[x];
+                numeros_do_usuario[x] = numeros_do_usuario[i];
+                numeros_do_usuario[i] = aux;
+            }
+        }
+    }// Fim da ordenação crescente dos numeros do usuarios.
+
+    //ordenação crescente dos números gerados.
+    for(let i=0; i < numero_gerado.length - 1; i++){
+        for(let x=i+1; x<=numero_gerado.length; x++){
+            if(numero_gerado[i] > numero_gerado[x]){
+                let aux = numero_gerado[x];
+                numero_gerado[x] = numero_gerado[i];
+                numero_gerado[i] = aux;
+            }
+        }
+    }// Fim da ordenação crescente dos números gerados.
+
+    // Busca binaria dos numeros acertados.
+    for(let i=0; i<numeros_do_usuario.length; i++){
+        max = numeros_do_usuario.length - 1;
+        min = 0;
+        while(min <= max){
+            let meio = parseInt((max + min)/2);
+
+            if(numeros_do_usuario[i] == numero_gerado[meio]){
+                numeros_acertados = numeros_acertados + 1;
+            }
+            if(numeros_do_usuario[i] >= numero_gerado[meio]){
+                min = meio + 1; 
+            }else{
+                max = meio - 1;
+            }
+        }
+    }// Fim da busca binaria dos numeros acertados.
+
+    // verificar o numero de acertos e exibir messagem!
+    switch(numeros_acertados){
+        case 6:
+            messagem_final = "Voçê ganhou na SENA";
+            console.log("entrou")
+            break;
+        case 5:
+            messagem_final = "Voçê ganhou na QUINA";
+            break;
+        case 4:
+            messagem_final = "Voçê ganhou na QUADRA";
+            break;
+        default: 
+            break;
+    }// Fim da verificação!
+
+    alert("Numeros inseridos pelo usuario: "+numeros_do_usuario+"\nNumeros gerados aleatorios:      "+numero_gerado+"\nNumeros acertados: "+numeros_acertados+"\n\n       "+messagem_final.toUpperCase());
+</script>
+</body>
+</html>
